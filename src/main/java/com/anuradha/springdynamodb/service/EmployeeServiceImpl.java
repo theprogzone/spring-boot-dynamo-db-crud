@@ -33,8 +33,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (ObjectUtils.isEmpty(employeeDTO)) {
             throw new EmployeeException("Employee details cannot be null");
         }
-        dynamoDBMapper.save(new Employee(employeeDTO.id(), employeeDTO.name(), employeeDTO.monthlySalary(), employeeDTO.birthDate(), employeeDTO.phone(), employeeDTO.email(), employeeDTO.isMarried()));
-        return new ResponseDTO<>("Employee created successfully", null);
+        Employee employee = new Employee(employeeDTO.id(), employeeDTO.name(), employeeDTO.monthlySalary(), employeeDTO.birthDate(), employeeDTO.phone(), employeeDTO.email(), employeeDTO.isMarried());
+        dynamoDBMapper.save(employee);
+        return new ResponseDTO<>("Employee created successfully", new EmployeeDTO(employee.getId(), employee.getName(), employee.getMonthlySalary(), employee.getBirthDate(), employee.getPhone(), employee.getEmail(), employee.getIsMarried()));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         Employee employee = new Employee(employeeDTO.id(), employeeDTO.name(), employeeDTO.monthlySalary(), employeeDTO.birthDate(), employeeDTO.phone(), employeeDTO.email(), employeeDTO.isMarried());
         dynamoDBMapper.save(employee, buildExpression(employee));
-        return new ResponseDTO<>("Employee updated successfully", null);
+        return new ResponseDTO<>("Employee updated successfully", new EmployeeDTO(employee.getId(), employee.getName(), employee.getMonthlySalary(), employee.getBirthDate(), employee.getPhone(), employee.getEmail(), employee.getIsMarried()));
     }
 
     @Override
